@@ -1,0 +1,447 @@
+[
+  {
+    "date": "2025-06-01",
+    "channel": "facebook_paid_ads",
+    "spend": 300.0
+  },
+  {
+    "date": "2025-06-01",
+    "channel": "youtube_paid_ads",
+    "spend": 412.25
+  },
+  {
+    "date": "2025-06-01",
+    "channel": "tiktok_paid_ads",
+    "spend": 524.5
+  },
+  {
+    "date": "2025-06-02",
+    "channel": "facebook_paid_ads",
+    "spend": 307.5
+  },
+  {
+    "date": "2025-06-02",
+    "channel": "youtube_paid_ads",
+    "spend": 419.75
+  },
+  {
+    "date": "2025-06-02",
+    "channel": "tiktok_paid_ads",
+    "spend": 532.0
+  },
+  {
+    "date": "2025-06-03",
+    "channel": "facebook_paid_ads",
+    "spend": 315.0
+  },
+  {
+    "date": "2025-06-03",
+    "channel": "youtube_paid_ads",
+    "spend": 427.25
+  },
+  {
+    "date": "2025-06-03",
+    "channel": "tiktok_paid_ads",
+    "spend": 539.5
+  },
+  {
+    "date": "2025-06-04",
+    "channel": "facebook_paid_ads",
+    "spend": 322.5
+  },
+  {
+    "date": "2025-06-04",
+    "channel": "youtube_paid_ads",
+    "spend": 434.75
+  },
+  {
+    "date": "2025-06-04",
+    "channel": "tiktok_paid_ads",
+    "spend": 547.0
+  },
+  {
+    "date": "2025-06-05",
+    "channel": "facebook_paid_ads",
+    "spend": 330.0
+  },
+  {
+    "date": "2025-06-05",
+    "channel": "youtube_paid_ads",
+    "spend": 442.25
+  },
+  {
+    "date": "2025-06-05",
+    "channel": "tiktok_paid_ads",
+    "spend": 554.5
+  },
+  {
+    "date": "2025-06-06",
+    "channel": "facebook_paid_ads",
+    "spend": 337.5
+  },
+  {
+    "date": "2025-06-06",
+    "channel": "youtube_paid_ads",
+    "spend": 449.75
+  },
+  {
+    "date": "2025-06-06",
+    "channel": "tiktok_paid_ads",
+    "spend": 562.0
+  },
+  {
+    "date": "2025-06-07",
+    "channel": "facebook_paid_ads",
+    "spend": 345.0
+  },
+  {
+    "date": "2025-06-07",
+    "channel": "youtube_paid_ads",
+    "spend": 457.25
+  },
+  {
+    "date": "2025-06-07",
+    "channel": "tiktok_paid_ads",
+    "spend": 569.5
+  },
+  {
+    "date": "2025-06-08",
+    "channel": "facebook_paid_ads",
+    "spend": 352.5
+  },
+  {
+    "date": "2025-06-08",
+    "channel": "youtube_paid_ads",
+    "spend": 464.75
+  },
+  {
+    "date": "2025-06-08",
+    "channel": "tiktok_paid_ads",
+    "spend": 577.0
+  },
+  {
+    "date": "2025-06-09",
+    "channel": "facebook_paid_ads",
+    "spend": 360.0
+  },
+  {
+    "date": "2025-06-09",
+    "channel": "youtube_paid_ads",
+    "spend": 472.25
+  },
+  {
+    "date": "2025-06-09",
+    "channel": "tiktok_paid_ads",
+    "spend": 584.5
+  },
+  {
+    "date": "2025-06-10",
+    "channel": "facebook_paid_ads",
+    "spend": 367.5
+  },
+  {
+    "date": "2025-06-10",
+    "channel": "youtube_paid_ads",
+    "spend": 479.75
+  },
+  {
+    "date": "2025-06-10",
+    "channel": "tiktok_paid_ads",
+    "spend": 592.0
+  },
+  {
+    "date": "2025-06-11",
+    "channel": "facebook_paid_ads",
+    "spend": 375.0
+  },
+  {
+    "date": "2025-06-11",
+    "channel": "youtube_paid_ads",
+    "spend": 487.25
+  },
+  {
+    "date": "2025-06-11",
+    "channel": "tiktok_paid_ads",
+    "spend": 599.5
+  },
+  {
+    "date": "2025-06-12",
+    "channel": "facebook_paid_ads",
+    "spend": 382.5
+  },
+  {
+    "date": "2025-06-12",
+    "channel": "youtube_paid_ads",
+    "spend": 494.75
+  },
+  {
+    "date": "2025-06-12",
+    "channel": "tiktok_paid_ads",
+    "spend": 607.0
+  },
+  {
+    "date": "2025-06-13",
+    "channel": "facebook_paid_ads",
+    "spend": 390.0
+  },
+  {
+    "date": "2025-06-13",
+    "channel": "youtube_paid_ads",
+    "spend": 502.25
+  },
+  {
+    "date": "2025-06-13",
+    "channel": "tiktok_paid_ads",
+    "spend": 614.5
+  },
+  {
+    "date": "2025-06-14",
+    "channel": "facebook_paid_ads",
+    "spend": 397.5
+  },
+  {
+    "date": "2025-06-14",
+    "channel": "youtube_paid_ads",
+    "spend": 509.75
+  },
+  {
+    "date": "2025-06-14",
+    "channel": "tiktok_paid_ads",
+    "spend": 622.0
+  },
+  {
+    "date": "2025-06-15",
+    "channel": "facebook_paid_ads",
+    "spend": 405.0
+  },
+  {
+    "date": "2025-06-15",
+    "channel": "youtube_paid_ads",
+    "spend": 517.25
+  },
+  {
+    "date": "2025-06-15",
+    "channel": "tiktok_paid_ads",
+    "spend": 629.5
+  },
+  {
+    "date": "2025-06-16",
+    "channel": "facebook_paid_ads",
+    "spend": 412.5
+  },
+  {
+    "date": "2025-06-16",
+    "channel": "youtube_paid_ads",
+    "spend": 524.75
+  },
+  {
+    "date": "2025-06-16",
+    "channel": "tiktok_paid_ads",
+    "spend": 637.0
+  },
+  {
+    "date": "2025-06-17",
+    "channel": "facebook_paid_ads",
+    "spend": 420.0
+  },
+  {
+    "date": "2025-06-17",
+    "channel": "youtube_paid_ads",
+    "spend": 532.25
+  },
+  {
+    "date": "2025-06-17",
+    "channel": "tiktok_paid_ads",
+    "spend": 644.5
+  },
+  {
+    "date": "2025-06-18",
+    "channel": "facebook_paid_ads",
+    "spend": 427.5
+  },
+  {
+    "date": "2025-06-18",
+    "channel": "youtube_paid_ads",
+    "spend": 539.75
+  },
+  {
+    "date": "2025-06-18",
+    "channel": "tiktok_paid_ads",
+    "spend": 652.0
+  },
+  {
+    "date": "2025-06-19",
+    "channel": "facebook_paid_ads",
+    "spend": 435.0
+  },
+  {
+    "date": "2025-06-19",
+    "channel": "youtube_paid_ads",
+    "spend": 547.25
+  },
+  {
+    "date": "2025-06-19",
+    "channel": "tiktok_paid_ads",
+    "spend": 659.5
+  },
+  {
+    "date": "2025-06-20",
+    "channel": "facebook_paid_ads",
+    "spend": 442.5
+  },
+  {
+    "date": "2025-06-20",
+    "channel": "youtube_paid_ads",
+    "spend": 554.75
+  },
+  {
+    "date": "2025-06-20",
+    "channel": "tiktok_paid_ads",
+    "spend": 667.0
+  },
+  {
+    "date": "2025-06-21",
+    "channel": "facebook_paid_ads",
+    "spend": 450.0
+  },
+  {
+    "date": "2025-06-21",
+    "channel": "youtube_paid_ads",
+    "spend": 562.25
+  },
+  {
+    "date": "2025-06-21",
+    "channel": "tiktok_paid_ads",
+    "spend": 674.5
+  },
+  {
+    "date": "2025-06-22",
+    "channel": "facebook_paid_ads",
+    "spend": 457.5
+  },
+  {
+    "date": "2025-06-22",
+    "channel": "youtube_paid_ads",
+    "spend": 569.75
+  },
+  {
+    "date": "2025-06-22",
+    "channel": "tiktok_paid_ads",
+    "spend": 682.0
+  },
+  {
+    "date": "2025-06-23",
+    "channel": "facebook_paid_ads",
+    "spend": 465.0
+  },
+  {
+    "date": "2025-06-23",
+    "channel": "youtube_paid_ads",
+    "spend": 577.25
+  },
+  {
+    "date": "2025-06-23",
+    "channel": "tiktok_paid_ads",
+    "spend": 689.5
+  },
+  {
+    "date": "2025-06-24",
+    "channel": "facebook_paid_ads",
+    "spend": 472.5
+  },
+  {
+    "date": "2025-06-24",
+    "channel": "youtube_paid_ads",
+    "spend": 584.75
+  },
+  {
+    "date": "2025-06-24",
+    "channel": "tiktok_paid_ads",
+    "spend": 697.0
+  },
+  {
+    "date": "2025-06-25",
+    "channel": "facebook_paid_ads",
+    "spend": 480.0
+  },
+  {
+    "date": "2025-06-25",
+    "channel": "youtube_paid_ads",
+    "spend": 592.25
+  },
+  {
+    "date": "2025-06-25",
+    "channel": "tiktok_paid_ads",
+    "spend": 704.5
+  },
+  {
+    "date": "2025-06-26",
+    "channel": "facebook_paid_ads",
+    "spend": 487.5
+  },
+  {
+    "date": "2025-06-26",
+    "channel": "youtube_paid_ads",
+    "spend": 599.75
+  },
+  {
+    "date": "2025-06-26",
+    "channel": "tiktok_paid_ads",
+    "spend": 712.0
+  },
+  {
+    "date": "2025-06-27",
+    "channel": "facebook_paid_ads",
+    "spend": 495.0
+  },
+  {
+    "date": "2025-06-27",
+    "channel": "youtube_paid_ads",
+    "spend": 607.25
+  },
+  {
+    "date": "2025-06-27",
+    "channel": "tiktok_paid_ads",
+    "spend": 719.5
+  },
+  {
+    "date": "2025-06-28",
+    "channel": "facebook_paid_ads",
+    "spend": 502.5
+  },
+  {
+    "date": "2025-06-28",
+    "channel": "youtube_paid_ads",
+    "spend": 614.75
+  },
+  {
+    "date": "2025-06-28",
+    "channel": "tiktok_paid_ads",
+    "spend": 727.0
+  },
+  {
+    "date": "2025-06-29",
+    "channel": "facebook_paid_ads",
+    "spend": 510.0
+  },
+  {
+    "date": "2025-06-29",
+    "channel": "youtube_paid_ads",
+    "spend": 622.25
+  },
+  {
+    "date": "2025-06-29",
+    "channel": "tiktok_paid_ads",
+    "spend": 734.5
+  },
+  {
+    "date": "2025-06-30",
+    "channel": "facebook_paid_ads",
+    "spend": 517.5
+  },
+  {
+    "date": "2025-06-30",
+    "channel": "youtube_paid_ads",
+    "spend": 629.75
+  }
+]
