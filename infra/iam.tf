@@ -242,7 +242,10 @@ resource "aws_iam_role" "github_actions_deploy_role" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:${var.github_repository}:*"
+            "token.actions.githubusercontent.com:sub" = [
+              "repo:${var.github_repository}:*",
+              "repo:chance221*/*CalendlyWebhookIngestionProject*:*"
+            ]
           }
         }
       }

@@ -66,6 +66,9 @@ jobs:
     needs: [lint-and-test, terraform-validate]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -73,7 +76,7 @@ jobs:
       - name: Configure AWS credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN || 'arn:aws:iam::440107864885:role/calendly-lakehouse-prod-github-deploy-role' }}
           aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
 
       - name: Package and upload Ingestion Lambda & Glue PySpark scripts with GitHub SHA directory names
