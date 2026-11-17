@@ -5,11 +5,14 @@ Iceberg MERGE INTO row_hash upserts, and Gold attribution summary calculations.
 from __future__ import annotations
 
 import json
+import sys
 from datetime import date
 from pathlib import Path
 from unittest.mock import MagicMock
 
-from glue_jobs.bronze_to_silver import (
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from glue_jobs.bronze_to_silver import (  # noqa: E402
     build_bronze_spend_archive_key,
     build_external_spend_url,
     fetch_and_archive_campaign_spend,
@@ -22,12 +25,12 @@ from glue_jobs.bronze_to_silver import (
     validate_campaign_spend_batch,
     validate_webhook_batch,
 )
-from glue_jobs.schemas import (
+from glue_jobs.schemas import (  # noqa: E402
     DEFAULT_UNMAPPED_CHANNEL,
     CalendlyWebhookContract,
     map_event_type_to_channel,
 )
-from glue_jobs.silver_to_gold import (
+from glue_jobs.silver_to_gold import (  # noqa: E402
     compute_gold_attribution_summary,
     get_gold_attribution_ddl,
     get_gold_attribution_merge_sql,

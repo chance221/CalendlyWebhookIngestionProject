@@ -4,12 +4,15 @@ from __future__ import annotations
 
 import hashlib
 import json
+import sys
 from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
 
-from ingestion_lambda.handler import (
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from ingestion_lambda.handler import (  # noqa: E402
     compact_timestamp,
     extract_invitee_uuid,
     extract_partition_date,

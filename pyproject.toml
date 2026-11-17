@@ -20,8 +20,8 @@ spark = [
 ]
 dashboard = [
     "streamlit>=1.32.0",
-    "pyiceberg[s3fs,glue,pyarrow]>=0.6.0",
-    "pandas>=2.1.0",
+    "pyiceberg[s3fs,glue,pyarrow]>=0.7.0",
+    "pandas>=2.2.2",
     "plotly>=5.18.0",
     "altair>=5.2.0",
 ]
@@ -29,6 +29,9 @@ dev = [
     "pytest>=8.0.0",
     "ruff>=0.3.0",
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src", "."]
