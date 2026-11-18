@@ -285,5 +285,5 @@ def test_gold_attribution_summary_and_iceberg_sql() -> None:
     assert "merge-on-read" in get_campaign_spend_ddl()
     assert "target.row_hash <> source.row_hash" in get_calendly_events_merge_sql()
     assert "target.row_hash <> source.row_hash" in get_campaign_spend_merge_sql()
-    assert "PARTITIONED BY (month(spend_date))" in get_gold_attribution_ddl()
+    assert "PARTITIONED BY (months(spend_date))" in get_gold_attribution_ddl()
     assert "NULLIF" in get_gold_attribution_merge_sql()

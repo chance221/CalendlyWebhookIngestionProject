@@ -141,16 +141,17 @@ CalendlyWebhookIngestionProject/
 
 ## 4. Local Setup, Testing & Deployment Instructions
 
-### 1. Install Dependencies & Run Unit Tests Locally
+### 1. Install Dependencies & Run Unit Tests Locally (with `uv`)
 ```bash
-pip install -e ".[dev,dashboard]"
-ruff check src/ tests/
-pytest -v
+uv sync --extra dev
+uv build --wheel --out-dir dist/
+uv run ruff check src/ tests/
+uv run pytest -v
 ```
 
 ### 2. Run the Streamlit Analytics Dashboard
 ```bash
-streamlit run src/dashboard/app.py
+uv run --extra dashboard streamlit run src/dashboard/app.py
 ```
 
 ### 3. Validate & Deploy AWS Infrastructure via Terraform

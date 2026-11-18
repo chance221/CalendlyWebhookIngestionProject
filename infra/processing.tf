@@ -1,6 +1,13 @@
 # -----------------------------------------------------------------------------
-# Upload Glue PySpark Scripts & Shared Schemas to S3 Glue Scripts Bucket
+# Upload Glue PySpark Scripts & Pre-Bundled Dependencies Zip to S3 Glue Bucket
 # -----------------------------------------------------------------------------
+resource "aws_s3_object" "glue_dependencies_bundle" {
+  bucket = aws_s3_bucket.glue_scripts.id
+  key    = "glue_jobs_${var.github_sha}/glue_dependencies.zip"
+  source = "${path.module}/../dist/glue_dependencies.zip"
+  etag   = filemd5("${path.module}/../dist/glue_dependencies.zip")
+}
+
 resource "aws_s3_object" "schemas_script" {
   bucket = aws_s3_bucket.glue_scripts.id
   key    = "glue_jobs_${var.github_sha}/schemas.py"
@@ -23,7 +30,7 @@ resource "aws_s3_object" "silver_to_gold_script" {
 }
 
 # -----------------------------------------------------------------------------
-# AWS Glue PySpark Jobs (Apache Iceberg 4.0)
+# AWS Glue PySpark Jobs (Apache Iceberg 4.0) - Zero Runtime Pip Install
 # -----------------------------------------------------------------------------
 resource "aws_glue_job" "bronze_to_silver" {
   name              = "${var.project_name}-${var.environment}-bronze-to-silver"
@@ -42,8 +49,7 @@ resource "aws_glue_job" "bronze_to_silver" {
   default_arguments = {
     "--job-language"                     = "python"
     "--datalake-formats"                 = "iceberg"
-    "--extra-py-files"                   = "s3://${aws_s3_bucket.glue_scripts.bucket}/${aws_s3_object.schemas_script.key}"
-    "--additional-python-modules"        = "pydantic>=2.6.0,requests>=2.31.0"
+    "--extra-py-files"                   = "s3://${aws_s3_bucket.glue_scripts.bucket}/${aws_s3_object.glue_dependencies_bundle.key}"
     "--BRONZE_BUCKET"                    = aws_s3_bucket.bronze.bucket
     "--SILVER_BUCKET"                    = aws_s3_bucket.silver.bucket
     "--SILVER_DATABASE"                  = aws_glue_catalog_database.silver.name
@@ -71,7 +77,7 @@ resource "aws_glue_job" "silver_to_gold" {
   default_arguments = {
     "--job-language"                     = "python"
     "--datalake-formats"                 = "iceberg"
-    "--extra-py-files"                   = "s3://${aws_s3_bucket.glue_scripts.bucket}/${aws_s3_object.schemas_script.key}"
+    "--extra-py-files"                   = "s3://${aws_s3_bucket.glue_scripts.bucket}/${aws_s3_object.glue_dependencies_bundle.key}"
     "--GOLD_BUCKET"                      = aws_s3_bucket.gold.bucket
     "--SILVER_DATABASE"                  = aws_glue_catalog_database.silver.name
     "--GOLD_DATABASE"                    = aws_glue_catalog_database.gold.name

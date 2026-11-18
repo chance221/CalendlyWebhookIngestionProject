@@ -20,7 +20,7 @@ logger.setLevel(logging.INFO)
 
 
 def get_gold_attribution_ddl(catalog: str = "glue_catalog", database: str = "gold") -> str:
-    """Return Apache Iceberg DDL for gold.campaign_attribution_summary partitioned by month(spend_date)."""
+    """Return Apache Iceberg DDL for gold.campaign_attribution_summary partitioned by months(spend_date)."""
     return f"""
     CREATE TABLE IF NOT EXISTS {catalog}.{database}.campaign_attribution_summary (
         spend_date DATE,
@@ -32,7 +32,7 @@ def get_gold_attribution_ddl(catalog: str = "glue_catalog", database: str = "gol
         cost_per_booking DOUBLE
     )
     USING iceberg
-    PARTITIONED BY (month(spend_date))
+    PARTITIONED BY (months(spend_date))
     TBLPROPERTIES (
         'format-version' = '2',
         'write.merge.mode' = 'merge-on-read',

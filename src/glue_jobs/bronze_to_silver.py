@@ -272,7 +272,7 @@ def get_campaign_spend_ddl(catalog: str = "glue_catalog", database: str = "silve
         row_hash STRING
     )
     USING iceberg
-    PARTITIONED BY (month(spend_date))
+    PARTITIONED BY (months(spend_date))
     TBLPROPERTIES (
         'format-version' = '2',
         'write.merge.mode' = 'merge-on-read',

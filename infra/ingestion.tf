@@ -54,18 +54,13 @@ resource "aws_apigatewayv2_stage" "default" {
 
 # -----------------------------------------------------------------------------
 # Ingestion AWS Lambda (Python 3.12) Polling SQS Processing Queue -> S3 Bronze
+# Pre-built by `uv` into dist/ingestion_lambda.zip (zero runtime pip install)
 # -----------------------------------------------------------------------------
-data "archive_file" "ingestion_lambda_zip" {
-  type        = "zip"
-  source_dir  = "${path.module}/../src/ingestion_lambda"
-  output_path = "${path.module}/build/ingestion_lambda_${var.github_sha}/ingestion_lambda.zip"
-}
-
 resource "aws_s3_object" "ingestion_lambda_package" {
   bucket = aws_s3_bucket.glue_scripts.id
   key    = "ingestion_lambda_${var.github_sha}/ingestion_lambda.zip"
-  source = data.archive_file.ingestion_lambda_zip.output_path
-  etag   = data.archive_file.ingestion_lambda_zip.output_md5
+  source = "${path.module}/../dist/ingestion_lambda.zip"
+  etag   = filemd5("${path.module}/../dist/ingestion_lambda.zip")
 }
 
 resource "aws_lambda_function" "ingestion" {
@@ -75,7 +70,7 @@ resource "aws_lambda_function" "ingestion" {
   runtime          = "python3.12"
   s3_bucket        = aws_s3_bucket.glue_scripts.id
   s3_key           = aws_s3_object.ingestion_lambda_package.key
-  source_code_hash = data.archive_file.ingestion_lambda_zip.output_base64sha256
+  source_code_hash = filebase64sha256("${path.module}/../dist/ingestion_lambda.zip")
   timeout          = 60
   memory_size      = 256
 
