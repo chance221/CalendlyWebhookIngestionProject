@@ -20,6 +20,7 @@ def load_iceberg_table_df(database: str, table_name: str, region: str) -> pd.Dat
             "glue",
             **{
                 "type": "glue",
+                "py-io-impl": "pyiceberg.io.fsspec.FsspecFileIO",
                 "s3.region": region,
                 "client.region": region,
             },
@@ -217,8 +218,13 @@ def render_dashboard() -> None:
     st.dataframe(channel_summary, use_container_width=True, hide_index=True)
 
     st.subheader("Recent Calendly Invitee Events (`silver.calendly_events`)")
-    st.dataframe(silver_df, use_container_width=True, hide_index=True)
+    paid_only_toggle = st.checkbox("Show Paid Ad Channels Only in Invitee Events Table", value=True)
+    if paid_only_toggle and "channel" in silver_df.columns:
+        display_silver_df = silver_df[silver_df["channel"].isin(selected_channels)]
+    else:
+        display_silver_df = silver_df
+    st.dataframe(display_silver_df, use_container_width=True, hide_index=True)
 
 
 if __name__ == "__main__":
-    render_dashboard()
+    render_dashboard()  

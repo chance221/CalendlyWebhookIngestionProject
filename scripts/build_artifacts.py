@@ -1,6 +1,6 @@
-"""Pre-build standalone deployment archives for AWS Glue (--extra-py-files) and AWS Lambda
-using `uv` cross-platform wheel installation so neither AWS Glue nor AWS Lambda ever runs
-`pip install` at runtime.
+"""Pre-build standalone deployment archives for AWS Glue and AWS Lambda using `uv`
+so neither AWS Glue nor AWS Lambda ever downloads from PyPI at runtime.
+
 """
 
 from __future__ import annotations
@@ -8,11 +8,13 @@ from __future__ import annotations
 import shutil
 import subprocess
 import sys
+import tempfile
 import zipfile
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DIST_DIR = ROOT_DIR / "dist"
+GLUE_WHEELS_DIR = DIST_DIR / "glue_wheels"
 BUILD_TMP = ROOT_DIR / "build" / "uv_staging"
 
 
@@ -33,6 +35,26 @@ def zip_directory(source_dir: Path, output_zip: Path) -> None:
                     continue
                 zf.write(file_path, rel.as_posix())
     print(f"Created archive: {output_zip} ({output_zip.stat().st_size:,} bytes)")
+
+
+def ensure_glue_dependencies_extracted() -> None:
+    """Runtime helper for AWS Glue: if `glue_dependencies.zip` is on sys.path as a zip archive,
+    extract it to a temporary directory and prepend that directory to sys.path so compiled
+    C/Rust extensions (.so files like pydantic_core) can be loaded by Linux dlopen().
+    """
+    for entry in list(sys.path):
+        if entry.endswith("glue_dependencies.zip") and Path(entry).is_file():
+            extract_dir = Path(tempfile.gettempdir()) / "calendly_glue_deps"
+            marker = extract_dir / ".extracted"
+            if not marker.exists():
+                extract_dir.mkdir(parents=True, exist_ok=True)
+                with zipfile.ZipFile(entry, "r") as zf:
+                    zf.extractall(extract_dir)
+                marker.write_text("ok", encoding="utf-8")
+            if str(extract_dir) not in sys.path:
+                sys.path.insert(0, str(extract_dir))
+            if entry in sys.path:
+                sys.path.remove(entry)
 
 
 def build_glue_dependencies_zip(uv_cmd: list[str]) -> Path:
@@ -122,7 +144,7 @@ def main() -> None:
     uv_bin = shutil.which("uv")
     uv_cmd = [uv_bin] if uv_bin else [sys.executable, "-m", "uv"]
 
-    # Also build the pure-Python project wheel into dist/
+    # Build the pure-Python project wheel into dist/
     run_cmd([*uv_cmd, "build", "--wheel", "--out-dir", str(DIST_DIR)])
 
     build_glue_dependencies_zip(uv_cmd)

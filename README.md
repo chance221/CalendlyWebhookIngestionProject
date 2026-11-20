@@ -1,56 +1,20 @@
 # Calendly Webhook & Paid Marketing Attribution Lakehouse (AWS + Apache Iceberg)
 
+
+
+CalendlyWebhookIngestionProject\images\CalendlyPipeline.jpg
+
 A production-grade, end-to-end serverless data lakehouse on AWS that ingests real-time **Calendly webhook events** (`invitee.created`, `invitee.canceled`) and rolling **external campaign spend records** into a **Medallion architecture (Bronze, Silver, Gold)** backed by **Apache Iceberg**, culminating in a **Streamlit + PyIceberg** analytics dashboard.
 
 ---
 
 ## 1. Architecture Overview
 
-```mermaid
-flowchart LR
-    subgraph External["External Data Sources"]
-        CW["Calendly Webhooks\n(POST JSON)"]
-        S3Ext["External S3 Spend Endpoint\n(Rolling 30-Day JSON, Day - 1)"]
-    end
+![Calendly Architecture](images/CalendlyPipeline.jpg)
 
-    subgraph Ingestion["Serverless Ingestion Layer"]
-        APIGW["Amazon API Gateway\n(HTTP API Direct Integration)"]
-        SQS["Amazon SQS\nProcessing Queue"]
-        DLQ["Amazon SQS\nDead-Letter Queue (DLQ)"]
-        LMB["Ingestion AWS Lambda\n(Python 3.12)"]
-    end
-
-    subgraph Lakehouse["Medallion Lakehouse (S3 + AWS Glue + Apache Iceberg)"]
-        EB["Amazon EventBridge\nBatch Schedule"]
-        BZ["S3 Bronze\nwebhooks/dt=YYYY-MM-DD/...\ncampaign_spend/dt=YYYY-MM-DD/..."]
-        GLUE1["AWS Glue PySpark\nbronze_to_silver.py\n(Pydantic + SHA-256 MERGE)"]
-        SLV["S3 Silver (Apache Iceberg)\nsilver.calendly_events\nsilver.campaign_spend"]
-        GLUE2["AWS Glue PySpark\nsilver_to_gold.py"]
-        GLD["S3 Gold (Apache Iceberg)\ngold.campaign_attribution_summary"]
-    end
-
-    subgraph Consumption["Analytics & Presentation"]
-        ST["Streamlit Dashboard\n(PyIceberg Direct Reader)"]
-    end
-
-    CW -->|POST /webhooks/calendly| APIGW
-    APIGW -->|SQS-SendMessage| SQS
-    SQS -->|Batch Poll| LMB
-    LMB -->|Deterministic Key| BZ
-    LMB -.->|Malformed JSON| DLQ
-    EB -->|Scheduled Trigger| GLUE1
-    S3Ext -->|HTTP GET Day-1| GLUE1
-    GLUE1 -->|Archive Raw Spend| BZ
-    BZ --> GLUE1
-    GLUE1 -.->|Pydantic Quarantine| DLQ
-    GLUE1 -->|MERGE INTO (MoR)| SLV
-    SLV --> GLUE2
-    GLUE2 -->|MERGE INTO| GLD
-    SLV --> ST
-    GLD --> ST
-```
 
 ### End-to-End Data Flow
+
 1. **Webhook Buffering & Ingestion (`API Gateway → SQS → Lambda → S3 Bronze`):**
    - **Amazon API Gateway (HTTP API)** integrates directly with the **SQS Processing Queue** (`SQS-SendMessage`), eliminating cold-start latency and throttling risk on incoming Calendly webhooks.
    - **Ingestion Lambda (`src/ingestion_lambda/handler.py`)** consumes SQS batches, extracts `invitee_uuid` (trailing UUID from `payload.uri`), `event`, and compact UTC `created_at` (`YYYYMMDDTHHMMSSZ`), and writes raw payloads to S3 Bronze using Hive-style daily partitioning:
@@ -107,6 +71,7 @@ CalendlyWebhookIngestionProject/
 ## 3. Architecture Decision Records (ADRs)
 
 ### ADR-001: Why SQS + Scheduled AWS Glue Batch Was Chosen Over Apache Flink / Kinesis
+
 - **Context:** Calendly webhooks arrive sporadically when prospects book or cancel info sessions, whereas external marketing spend files are published once daily (`Day - 1` rolling 30-day snapshots).
 - **Decision:** Buffer real-time webhook bursts in **Amazon SQS** via direct API Gateway integration, land raw JSON objects to S3 Bronze via a lightweight Python 3.12 Lambda, and run **AWS Glue PySpark** on an **EventBridge Schedule** (rather than per-file S3 triggers or 24/7 Flink/Kinesis streams).
 - **Consequences:**
@@ -114,6 +79,7 @@ CalendlyWebhookIngestionProject/
   - Prevents the Apache Iceberg small-file and metadata-churn problem that occurs when S3 object-created events trigger micro-batches for individual webhooks.
 
 ### ADR-002: Why DynamoDB Was Omitted in Favor of Deterministic Bronze Keys + SHA-256 `row_hash` Iceberg `MERGE INTO`
+
 - **Context:** Traditional serverless pipelines often maintain an external DynamoDB state table to deduplicate webhook deliveries and track restatements in rolling 30-day spend exports (90 records per file: 3 channels × 30 days).
 - **Decision:** Omit DynamoDB entirely. Enforce idempotency at two native Lakehouse boundaries:
   1. **Bronze Layer:** Deterministic S3 object keys (`webhooks/dt=YYYY-MM-DD/{invitee_uuid}_{event}_{created_at}.json`) make duplicate SQS deliveries idempotent `PutObject` overwrites.
@@ -124,6 +90,7 @@ CalendlyWebhookIngestionProject/
   - When a 90-record rolling campaign spend file arrives with 87 unchanged historical records, 2 restated historical records, and 1 new daily record, Iceberg skips the 87 unchanged rows without writing unnecessary positional delete files or rewriting unchanged Parquet data files.
 
 ### ADR-003: Why Campaign Attribution Maps `scheduled_event.event_type` URLs Instead of `payload.tracking` UTM Fields
+
 - **Context:** Incoming Calendly webhook payloads have `null` values across `payload.tracking` (`utm_source`, `utm_medium`, `utm_campaign`, etc.) because each paid advertising platform directs traffic to a dedicated Calendly scheduling link (`event_type`).
 - **Decision:** Derive the marketing `channel` deterministically in Silver from `payload.scheduled_event.event_type` using the canonical lookup table in `src/glue_jobs/schemas.py`:
   - `.../event_types/79652b8a-1688-4d0b-ba8f-733c70856de4` → `"facebook_paid_ads"`
@@ -133,6 +100,7 @@ CalendlyWebhookIngestionProject/
 - **Consequences:** Guarantees 100% deterministic join compatibility with `silver.campaign_spend` on `(channel, booking_date = spend_date)` even when client-side cookies or UTM parameters are stripped.
 
 ### ADR-004: How Pydantic v2 + Amazon SQS DLQ Isolates Bad Data Without Halting Batch Pipelines
+
 - **Context:** Schema drift or upstream API anomalies (such as missing `payload.uri`, missing `scheduled_event.start_time`, or malformed `date`/`spend` values in external JSON files) can crash a PySpark batch job and block executive reporting for all valid records.
 - **Decision:** Validate every Bronze record in Python using strict **Pydantic v2** contracts (`CalendlyWebhookContract` and `CampaignSpendContract`) before constructing the Spark source view for Iceberg `MERGE INTO`. Any record failing validation is serialized alongside its structured Pydantic error details and published to the **SQS Dead-Letter Queue (DLQ)**.
 - **Consequences:** Valid bookings and spend records flow uninterrupted into Silver and Gold tables, while quarantined payloads remain inspectable and replayable from the SQS DLQ.
@@ -142,6 +110,7 @@ CalendlyWebhookIngestionProject/
 ## 4. Local Setup, Testing & Deployment Instructions
 
 ### 1. Install Dependencies & Run Unit Tests Locally (with `uv`)
+
 ```bash
 uv sync --extra dev
 uv build --wheel --out-dir dist/
@@ -150,11 +119,13 @@ uv run pytest -v
 ```
 
 ### 2. Run the Streamlit Analytics Dashboard
+
 ```bash
 uv run --extra dashboard streamlit run src/dashboard/app.py
 ```
 
 ### 3. Validate & Deploy AWS Infrastructure via Terraform
+
 ```bash
 cd infra
 terraform fmt -check

@@ -97,11 +97,11 @@ resource "aws_s3_bucket_public_access_block" "glue_scripts" {
 resource "aws_glue_catalog_database" "silver" {
   name         = "calendly_silver"
   description  = "Silver Medallion Apache Iceberg database for validated Calendly webhooks and campaign spend"
-  location_uri = "s3://${aws_s3_bucket.silver.bucket}/warehouse/"
+  location_uri = "s3://${aws_s3_bucket.silver.bucket}/warehouse"
 }
 
 resource "aws_glue_catalog_database" "gold" {
   name         = "calendly_gold"
   description  = "Gold Medallion Apache Iceberg database for channel attribution and cost-per-booking analytics"
-  location_uri = "s3://${aws_s3_bucket.gold.bucket}/warehouse/"
+  location_uri = "s3://${aws_s3_bucket.gold.bucket}/warehouse"
 }

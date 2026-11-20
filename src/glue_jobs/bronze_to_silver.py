@@ -1,3 +1,4 @@
+# ruff: noqa: I001
 """AWS Glue PySpark Bronze-to-Silver job:
 - Fetches rolling 30-day campaign spend from external S3 endpoint (Day - 1) and archives to Bronze.
 - Validates Calendly webhooks and campaign spend records using Pydantic contracts, routing invalid records to SQS DLQ.
@@ -14,9 +15,10 @@ from typing import Any
 
 import boto3
 import requests
-from pydantic import ValidationError
 
+import glue_jobs  # noqa: F401, I001 - ensures glue_dependencies.zip native .so extraction before importing pydantic
 from glue_jobs.schemas import CalendlyWebhookContract, CampaignSpendContract
+from pydantic import ValidationError
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
